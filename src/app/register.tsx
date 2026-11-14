@@ -13,6 +13,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 export default function RegisterScreen() {
   const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
@@ -23,6 +24,7 @@ export default function RegisterScreen() {
   const [focusedField, setFocusedField] = useState<
     "nama" | "email" | "password" | "confirm" | null
   >(null);
+
   const handleRegister = () => {
     if (
       !nama.trim() ||
@@ -30,7 +32,7 @@ export default function RegisterScreen() {
       !password.trim() ||
       !confirmPassword.trim()
     ) {
-      Alert.alert("Pendaftaran Gagal", "Semua kolom formulir wajib diisi.");
+      Alert.alert("Form Belum Lengkap", "Semua kolom pendaftaran wajib diisi.");
       return;
     }
     if (password.length < 6) {
@@ -42,48 +44,50 @@ export default function RegisterScreen() {
     }
     if (password !== confirmPassword) {
       Alert.alert(
-        "Tidak Cocok",
+        "Kata Sandi Berbeda",
         "Konfirmasi kata sandi tidak sama dengan kata sandi.",
       );
       return;
     }
-    // Catatan: Pada modul berikutnya, data ini akan dikirim sebagai JSON
-    // ke endpoint POST /api/register Laravel 13.
+
     Alert.alert(
       "Pendaftaran Berhasil!",
-      `Akun atas nama ${nama.trim()} siap digunakan. Silakan masuk melalui halaman Login.`,
-      [{ text: "Ke Login", onPress: () => router.back() }],
+      `Akun ${nama.trim()} berhasil didaftarkan. Silakan login.`,
+      [{ text: "Menuju Login", onPress: () => router.back() }],
     );
   };
+
   return (
     <SafeAreaView style={authStyles.safeArea}>
       <KeyboardAvoidingView
         style={authStyles.flexContainer}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView
           contentContainerStyle={authStyles.scrollContent}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Tombol Kembali Kustom */}
+          {/* Tombol Kembali */}
           <TouchableOpacity
             style={authStyles.topBackButton}
             onPress={() => router.back()}
           >
             <Ionicons name="arrow-back" size={20} color="#0F172A" />
           </TouchableOpacity>
+
           <View style={authStyles.headerArea}>
             <View style={authStyles.logoBadge}>
-              <Ionicons name="person-add" size={28} color="#2563EB" />
+              <Ionicons name="person-add" size={26} color="#2563EB" />
             </View>
             <Text style={authStyles.title}>Buat Akun Baru</Text>
             <Text style={authStyles.subtitle}>
-              Lengkapi data diri Anda untuk mendaftarkan akun baru
+              Lengkapi data berikut untuk registrasi akun praktikum
             </Text>
           </View>
+
           <View style={authStyles.card}>
-            {/* Nama Lengkap */}
+            {/* Input Nama Lengkap */}
             <View style={authStyles.formGroup}>
               <Text style={authStyles.label}>Nama Lengkap</Text>
               <View
@@ -94,13 +98,13 @@ export default function RegisterScreen() {
               >
                 <Ionicons
                   name="person-outline"
-                  size={20}
+                  size={19}
                   color={focusedField === "nama" ? "#2563EB" : "#64748B"}
                   style={authStyles.inputIcon}
                 />
                 <TextInput
                   style={authStyles.input}
-                  placeholder="Contoh: Muhammad Rizki"
+                  placeholder="Contoh: Luthfi Ariesto Prayoga"
                   placeholderTextColor="#94A3B8"
                   value={nama}
                   onChangeText={setNama}
@@ -109,7 +113,8 @@ export default function RegisterScreen() {
                 />
               </View>
             </View>
-            {/* Email */}
+
+            {/* Input Email */}
             <View style={authStyles.formGroup}>
               <Text style={authStyles.label}>Alamat Email</Text>
               <View
@@ -120,7 +125,7 @@ export default function RegisterScreen() {
               >
                 <Ionicons
                   name="mail-outline"
-                  size={20}
+                  size={19}
                   color={focusedField === "email" ? "#2563EB" : "#64748B"}
                   style={authStyles.inputIcon}
                 />
@@ -137,7 +142,8 @@ export default function RegisterScreen() {
                 />
               </View>
             </View>
-            {/* Password */}
+
+            {/* Input Password */}
             <View style={authStyles.formGroup}>
               <Text style={authStyles.label}>Kata Sandi</Text>
               <View
@@ -148,7 +154,7 @@ export default function RegisterScreen() {
               >
                 <Ionicons
                   name="lock-closed-outline"
-                  size={20}
+                  size={19}
                   color={focusedField === "password" ? "#2563EB" : "#64748B"}
                   style={authStyles.inputIcon}
                 />
@@ -169,15 +175,13 @@ export default function RegisterScreen() {
                 >
                   <Ionicons
                     name={showPassword ? "eye-off-outline" : "eye-outline"}
-                    size={20}
+                    size={19}
                     color="#64748B"
                   />
                 </TouchableOpacity>
               </View>
-              <Text style={authStyles.helperText}>
-                Gunakan kombinasi huruf dan angka.
-              </Text>
             </View>
+
             {/* Konfirmasi Password */}
             <View style={authStyles.formGroup}>
               <Text style={authStyles.label}>Konfirmasi Kata Sandi</Text>
@@ -188,8 +192,8 @@ export default function RegisterScreen() {
                 ]}
               >
                 <Ionicons
-                  name="checkmark-circle-outline"
-                  size={20}
+                  name="shield-checkmark-outline"
+                  size={19}
                   color={focusedField === "confirm" ? "#2563EB" : "#64748B"}
                   style={authStyles.inputIcon}
                 />
@@ -210,24 +214,27 @@ export default function RegisterScreen() {
                 >
                   <Ionicons
                     name={showConfirm ? "eye-off-outline" : "eye-outline"}
-                    size={20}
+                    size={19}
                     color="#64748B"
                   />
                 </TouchableOpacity>
               </View>
             </View>
+
+            {/* Tombol Register */}
             <TouchableOpacity
               style={authStyles.primaryButton}
-              activeOpacity={0.85}
+              activeOpacity={0.8}
               onPress={handleRegister}
             >
-              <Text style={authStyles.primaryButtonText}>Daftar Akun</Text>
-              <Ionicons name="checkmark" size={19} color="#FFFFFF" />
+              <Text style={authStyles.primaryButtonText}>Daftar Sekarang</Text>
+              <Ionicons name="checkmark" size={18} color="#FFFFFF" />
             </TouchableOpacity>
+
             <View style={[authStyles.footerRow, { marginTop: 18 }]}>
               <Text style={authStyles.footerText}>Sudah memiliki akun?</Text>
               <TouchableOpacity onPress={() => router.back()}>
-                <Text style={authStyles.footerLink}>Masuk di sini</Text>
+                <Text style={authStyles.footerLink}>Masuk</Text>
               </TouchableOpacity>
             </View>
           </View>
